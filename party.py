@@ -31,9 +31,11 @@ class Address:
         values = values.copy()
         if 'country_zip' in values:
             if values['country_zip']:
-                country_zip, = CountryZip.search([
-                        ('id', '=', values['country_zip']),
-                        ], limit=1)
+                country_zip = values['country_zip']
+                if not isinstance(country_zip, CountryZip):
+                    country_zip, = CountryZip.search([
+                            ('id', '=', values['country_zip']),
+                            ], limit=1)
                 values['zip'] = country_zip.zip
                 values['city'] = country_zip.city
                 values['country'] = country_zip.country.id
@@ -50,7 +52,7 @@ class Address:
         new_vlist = []
         for values in vlist:
             new_vlist.append(cls.update_zip_values(CountryZip, values))
-        super(Address, cls).create(new_vlist)
+        return super(Address, cls).create(new_vlist)
 
     @classmethod
     def write(cls, *args):
