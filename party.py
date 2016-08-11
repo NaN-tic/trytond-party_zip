@@ -50,7 +50,7 @@ class Address:
         new_vlist = []
         for values in vlist:
             new_vlist.append(cls.update_zip_values(CountryZip, values))
-        super(Address, cls).create(new_vlist)
+        return super(Address, cls).create(new_vlist)
 
     @classmethod
     def write(cls, *args):
