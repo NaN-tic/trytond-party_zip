@@ -56,31 +56,31 @@ class PartyZipTestCase(ModuleTestCase):
                     'city': 'City',
                     }])
         self.assertEqual(address.zip, None)
-        self.assertEqual(address.city, None)
-        Address.write([address, {
+        self.assertEqual(address.city, 'City')
+        Address.write([address], {
                     'country_zip': zip1,
-                    }])
+                    })
         self.assertEqual(address.zip, 'zip1')
         self.assertEqual(address.city, 'city1')
         self.assertEqual(address.country.id, country1.id)
         self.assertEqual(address.subdivision.id, subdivision1.id)
 
-        Address.write([address, {
+        Address.write([address], {
                     'country_zip': zip2,
-                    }])
+                    })
         self.assertEqual(address.zip, 'zip2')
         self.assertEqual(address.city, 'city2')
         self.assertEqual(address.country.id, country2.id)
         self.assertEqual(address.subdivision.id, subdivision2.id)
 
-        Zip.write([zip2, {
+        Zip.write([zip2], {
                     'zip': 'ZIP 3',
                     'city': 'CITY 3',
                     'country': country1.id,
                     'subdivision': subdivision1.id,
-                    }])
+                    })
         address, = Address.browse([address.id])
-        self.assertEqual(address.zip, 'ZIP3')
+        self.assertEqual(address.zip, 'ZIP 3')
         self.assertEqual(address.city, 'CITY 3')
         self.assertEqual(address.country.id, country1.id)
         self.assertEqual(address.subdivision.id, subdivision1.id)
@@ -88,5 +88,6 @@ class PartyZipTestCase(ModuleTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(PartyZipTestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        PartyZipTestCase))
     return suite
