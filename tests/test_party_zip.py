@@ -58,7 +58,7 @@ class PartyZipTestCase(ModuleTestCase):
         self.assertEqual(address.zip, None)
         self.assertEqual(address.city, 'City')
         Address.write([address], {
-                    'country_zip': zip1,
+                    'country_zip': zip1.id,
                     })
         self.assertEqual(address.zip, 'zip1')
         self.assertEqual(address.city, 'city1')
@@ -66,7 +66,7 @@ class PartyZipTestCase(ModuleTestCase):
         self.assertEqual(address.subdivision.id, subdivision1.id)
 
         Address.write([address], {
-                    'country_zip': zip2,
+                    'country_zip': zip2.id,
                     })
         self.assertEqual(address.zip, 'zip2')
         self.assertEqual(address.city, 'city2')
