@@ -7,9 +7,8 @@ from trytond.pyson import Eval, If, Bool
 __all__ = ['Address', 'CountryZip']
 
 
-class Address:
+class Address(metaclass=PoolMeta):
     __name__ = 'party.address'
-    __metaclass__ = PoolMeta
     country_zip = fields.Many2One('country.zip', 'Location',
         ondelete='RESTRICT', domain=[
             If(Bool(Eval('country')), ('country', '=', Eval('country', -1)),
@@ -74,9 +73,8 @@ class Address:
             self.city = None
 
 
-class CountryZip:
+class CountryZip(metaclass=PoolMeta):
     __name__ = 'country.zip'
-    __metaclass__ = PoolMeta
 
     def get_rec_name(self, name):
         res = []
