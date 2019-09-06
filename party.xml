@@ -21,7 +21,7 @@
             <field name="act_window" ref="act_subdivision_form"/>
         </record>
         <menuitem parent="country.menu_country_form" action="act_subdivision_form"
-            id="menu_subdivision_form" string="Subdivisions"/>
+            id="menu_subdivision_form"/>
 
         <record model="ir.action.act_window" id="act_subdivision_form2">
             <field name="name">Subdivisions</field>
