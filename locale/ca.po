@@ -1,0 +1,27 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.address,country_zip:"
+msgid "Location"
+msgstr "Ubicació"
+
+msgctxt "model:ir.action,name:act_subdivision_form"
+msgid "Subdivisions"
+msgstr "Subdivisions"
+
+msgctxt "model:ir.action,name:act_subdivision_form2"
+msgid "Subdivisions"
+msgstr "Subdivisions"
+
+msgctxt "model:ir.action,name:act_zip_form"
+msgid "Zips"
+msgstr "Codis postals"
+
+msgctxt "model:ir.ui.menu,name:menu_subdivision_form"
+msgid "Subdivisions"
+msgstr "Subdivisions"
+
+msgctxt "model:ir.ui.menu,name:menu_zip_form"
+msgid "Zips"
+msgstr "Codis postals"
