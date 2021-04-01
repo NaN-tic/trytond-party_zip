@@ -18,7 +18,7 @@ class PartyZipTestCase(ModuleTestCase):
         Address = pool.get('party.address')
         Country = pool.get('country.country')
         Subdivision = pool.get('country.subdivision')
-        Zip = pool.get('country.zip')
+        PostalCode = pool.get('country.postal_code')
 
         country1, country2 = Country.create([{
                     'name': 'Country 1',
@@ -36,13 +36,13 @@ class PartyZipTestCase(ModuleTestCase):
                     'type': 'area',
                     'country': country2.id,
                     }])
-        zip1, zip2 = Zip.create([{
-                    'zip': 'zip1',
+        postal_code1, postal_code2 = PostalCode.create([{
+                    'postal_code': 'postal_code1',
                     'city': 'city1',
                     'country': country1.id,
                     'subdivision': subdivision1.id,
                     }, {
-                    'zip': 'zip2',
+                    'postal_code': 'postal_code2',
                     'city': 'city2',
                     'country': country2.id,
                     'subdivision': subdivision2.id,
@@ -55,32 +55,32 @@ class PartyZipTestCase(ModuleTestCase):
                     'street': 'St sample, 15',
                     'city': 'City',
                     }])
-        self.assertEqual(address.zip, None)
+        self.assertEqual(address.postal_code, None)
         self.assertEqual(address.city, 'City')
         Address.write([address], {
-                    'country_zip': zip1.id,
+                    'location': postal_code1.id,
                     })
-        self.assertEqual(address.zip, 'zip1')
+        self.assertEqual(address.postal_code, 'postal_code1')
         self.assertEqual(address.city, 'city1')
         self.assertEqual(address.country.id, country1.id)
         self.assertEqual(address.subdivision.id, subdivision1.id)
 
         Address.write([address], {
-                    'country_zip': zip2.id,
+                    'location': postal_code2.id,
                     })
-        self.assertEqual(address.zip, 'zip2')
+        self.assertEqual(address.postal_code, 'postal_code2')
         self.assertEqual(address.city, 'city2')
         self.assertEqual(address.country.id, country2.id)
         self.assertEqual(address.subdivision.id, subdivision2.id)
 
-        Zip.write([zip2], {
-                    'zip': 'ZIP 3',
+        PostalCode.write([postal_code2], {
+                    'postal_code': 'Postal Code 3',
                     'city': 'CITY 3',
                     'country': country1.id,
                     'subdivision': subdivision1.id,
                     })
         address, = Address.browse([address.id])
-        self.assertEqual(address.zip, 'ZIP 3')
+        self.assertEqual(address.postal_code, 'Postal Code 3')
         self.assertEqual(address.city, 'CITY 3')
         self.assertEqual(address.country.id, country1.id)
         self.assertEqual(address.subdivision.id, subdivision1.id)

@@ -4,12 +4,10 @@ from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
-__all__ = ['Address', 'CountryZip']
-
 
 class Address(metaclass=PoolMeta):
     __name__ = 'party.address'
-    country_zip = fields.Many2One('country.zip', 'Location',
+    location = fields.Many2One('country.postal_code', 'Location',
         ondelete='RESTRICT', domain=[
             If(Bool(Eval('country')), ('country', '=', Eval('country', -1)),
                 ()),
@@ -20,66 +18,72 @@ class Address(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.zip.readonly = True
+        cls.postal_code.readonly = True
         cls.city.readonly = True
-        cls.country.states['readonly'] |= Bool(Eval('country_zip'))
-        cls.subdivision.states['readonly'] |= Bool(Eval('country_zip'))
+        cls.country.states['readonly'] |= Bool(Eval('location'))
+        cls.subdivision.states['readonly'] |= Bool(Eval('location'))
+
+    @classmethod
+    def __register__(cls, module):
+        # Migration from 5.8: rename country_zip to location
+        table_h = cls.__table_handler__(module)
+        table_h.column_rename('country_zip', 'location')
+        super().__register__(module)
 
     @staticmethod
-    def update_zip_values(CountryZip, values):
+    def update_location_values(values):
+        pool = Pool()
+        PostalCode = pool.get('country.postal_code')
+
         values = values.copy()
-        if 'country_zip' in values:
-            if values['country_zip']:
-                country_zip, = CountryZip.search([
-                        ('id', '=', values['country_zip']),
-                        ], limit=1)
-                values['zip'] = country_zip.zip
-                values['city'] = country_zip.city
-                values['country'] = country_zip.country.id
-                values['subdivision'] = (country_zip.subdivision.id if
-                    country_zip.subdivision else None)
+        if 'location' in values:
+            if values['location']:
+                postal_code = PostalCode(values['location'])
+                values['postal_code'] = postal_code.postal_code
+                values['city'] = postal_code.city
+                values['country'] = postal_code.country.id
+                values['subdivision'] = (postal_code.subdivision.id if
+                    postal_code.subdivision else None)
             else:
-                values['zip'] = None
+                values['postal_code'] = None
                 values['city'] = None
         return values
 
     @classmethod
     def create(cls, vlist):
-        CountryZip = Pool().get('country.zip')
         new_vlist = []
         for values in vlist:
-            new_vlist.append(cls.update_zip_values(CountryZip, values))
+            new_vlist.append(cls.update_location_values(values))
         return super(Address, cls).create(new_vlist)
 
     @classmethod
     def write(cls, *args):
-        CountryZip = Pool().get('country.zip')
         actions = iter(args)
         new_args = []
         for addresses, values in zip(actions, actions):
             new_args.append(addresses)
-            new_args.append(cls.update_zip_values(CountryZip, values))
+            new_args.append(cls.update_location_values(values))
         super(Address, cls).write(*new_args)
 
-    @fields.depends('country_zip')
-    def on_change_country_zip(self):
-        if self.country_zip:
-            self.zip = self.country_zip.zip
-            self.city = self.country_zip.city
-            self.country = self.country_zip.country
-            self.subdivision = self.country_zip.subdivision
+    @fields.depends('location')
+    def on_change_location(self):
+        if self.location:
+            self.postal_code = self.location.postal_code
+            self.city = self.location.city
+            self.country = self.location.country
+            self.subdivision = self.location.subdivision
         else:
-            self.zip = None
+            self.postal_code = None
             self.city = None
 
 
-class CountryZip(metaclass=PoolMeta):
-    __name__ = 'country.zip'
+class PostalCode(metaclass=PoolMeta):
+    __name__ = 'country.postal_code'
 
     def get_rec_name(self, name):
         res = []
-        if self.zip:
-            res.append(self.zip)
+        if self.postal_code:
+            res.append(self.postal_code)
         if self.city:
             res.append(self.city)
         res = [' '.join(res)]
@@ -92,7 +96,7 @@ class CountryZip(metaclass=PoolMeta):
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
-            [('zip',) + tuple(clause[1:])],
+            [('postal_code',) + tuple(clause[1:])],
             [('city',) + tuple(clause[1:])],
             ]
 
@@ -100,17 +104,17 @@ class CountryZip(metaclass=PoolMeta):
     def write(cls, *args):
         Address = Pool().get('party.address')
 
-        super(CountryZip, cls).write(*args)
+        super().write(*args)
 
         actions = iter(args)
-        fields = set(['zip', 'city', 'country', 'subdivision'])
+        fields = set(['postal_code', 'city', 'country', 'subdivision'])
         to_update = []
-        for zips, values in zip(actions, actions):
+        for locations, values in zip(actions, actions):
             intersec = set(values.keys()) & fields
             if not intersec:
                 continue
             addresses = Address.search([
-                    ('country_zip', 'in', [x.id for x in zips]),
+                    ('location', 'in', [x.id for x in locations]),
                     ])
             to_update.append(addresses)
             address_values = {}

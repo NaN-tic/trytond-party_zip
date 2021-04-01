@@ -45,21 +45,21 @@
             <field name="action" ref="act_subdivision_form2"/>
         </record>
 
-        <record model="ir.action.act_window" id="act_zip_form">
-            <field name="name">Zips</field>
-            <field name="res_model">country.zip</field>
+        <record model="ir.action.act_window" id="act_postal_code_form">
+            <field name="name">Postal Codes</field>
+            <field name="res_model">country.postal_code</field>
         </record>
-        <record model="ir.action.act_window.view" id="act_zip_form_view1">
+        <record model="ir.action.act_window.view" id="act_postal_code_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="country.zip_view_list"/>
-            <field name="act_window" ref="act_zip_form"/>
+            <field name="view" ref="country.postal_code_view_list"/>
+            <field name="act_window" ref="act_postal_code_form"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_zip_form_view2">
+        <record model="ir.action.act_window.view" id="act_postal_code_form_view2">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="country.zip_view_form"/>
-            <field name="act_window" ref="act_zip_form"/>
+            <field name="view" ref="country.postal_code_view_form"/>
+            <field name="act_window" ref="act_postal_code_form"/>
         </record>
-        <menuitem parent="country.menu_country_form" action="act_zip_form"
-            id="menu_zip_form"/>
+        <menuitem parent="country.menu_country_form" action="act_postal_code_form"
+            id="menu_postal_code_form"/>
     </data>
 </tryton>

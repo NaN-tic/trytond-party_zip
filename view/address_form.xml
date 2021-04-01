@@ -2,9 +2,9 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/label[@name='zip']" position="before">
-        <label name="country_zip"/>
-        <field name="country_zip" colspan="3"/>
+    <xpath expr="/form/label[@name='postal_code']" position="before">
+        <label name="location"/>
+        <field name="location" colspan="3"/>
         <newline/>
     </xpath>
 </data>

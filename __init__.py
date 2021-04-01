@@ -6,5 +6,5 @@ from . import party
 def register():
     Pool.register(
         party.Address,
-        party.CountryZip,
+        party.PostalCode,
         module='party_zip', type_='model')
