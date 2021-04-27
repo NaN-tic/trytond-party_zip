@@ -20,8 +20,15 @@ class Address(metaclass=PoolMeta):
         super(Address, cls).__setup__()
         cls.postal_code.readonly = True
         cls.city.readonly = True
-        cls.country.states['readonly'] |= Bool(Eval('location'))
-        cls.subdivision.states['readonly'] |= Bool(Eval('location'))
+        eval_location = Bool(Eval('location'))
+        if cls.country.states.get('readonly'):
+            cls.country.states['readonly'] |= eval_location
+        else:
+            cls.country.states['readonly'] = eval_location
+        if cls.subdivision.states.get('readonly'):
+            cls.subdivision.states['readonly'] = eval_location
+        else:
+            cls.subdivision.states['readonly'] = eval_location
 
     @classmethod
     def __register__(cls, module):
