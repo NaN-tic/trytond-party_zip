@@ -45,15 +45,25 @@ class Address(metaclass=PoolMeta):
         values = values.copy()
         if 'location' in values:
             if values['location']:
-                postal_code = PostalCode(values['location'])
-                values['postal_code'] = postal_code.postal_code
-                values['city'] = postal_code.city
-                values['country'] = postal_code.country.id
-                values['subdivision'] = (postal_code.subdivision.id if
-                    postal_code.subdivision else None)
-            else:
-                values['postal_code'] = None
-                values['city'] = None
+                postal_codes = PostalCode.search([
+                        ('id', '=', values['location']),
+                        ], limit=1)
+                # In some rare cases it can happen that country_zip ID does not
+                # exist in the database. In that case we avoid crashing and, we
+                # set country_zip, zip and city to NULL
+                if postal_codes:
+                    postal_code, = postal_codes
+                    values['zip'] = postal_code.postal_code
+                    values['city'] = postal_code.city
+                    values['country'] = postal_code.country.id
+                    values['subdivision'] = (postal_code.subdivision.id if
+                        postal_code.subdivision else None)
+                    return values
+                else:
+                    values['location'] = None
+
+            values['postal_code'] = None
+            values['city'] = None
         return values
 
     @classmethod
