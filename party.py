@@ -53,7 +53,7 @@ class Address(metaclass=PoolMeta):
                 # set country_zip, zip and city to NULL
                 if postal_codes:
                     postal_code, = postal_codes
-                    values['zip'] = postal_code.postal_code
+                    values['postal_code'] = postal_code.postal_code
                     values['city'] = postal_code.city
                     values['country'] = postal_code.country.id
                     values['subdivision'] = (postal_code.subdivision.id if
