@@ -68,6 +68,7 @@ class Address(metaclass=PoolMeta):
 
     @classmethod
     def create(cls, vlist):
+        vlist = [x.copy() for x in vlist]
         new_vlist = []
         for values in vlist:
             new_vlist.append(cls.update_location_values(values))
