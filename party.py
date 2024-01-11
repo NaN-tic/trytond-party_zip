@@ -13,7 +13,7 @@ class Address(metaclass=PoolMeta):
                 ()),
             If(Bool(Eval('subdivision')),
                 ('subdivision', '=', Eval('subdivision', -1)), ()),
-            ], depends=['country', 'subdivision'])
+            ])
 
     @classmethod
     def __setup__(cls):
