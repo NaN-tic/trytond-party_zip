@@ -1,10 +1,29 @@
 #
+# Albert Cervera i Areny <albert@nan-tic.com>, 2024.
 msgid ""
-msgstr "Content-Type: text/plain; charset=utf-8\n"
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Last-Translator: Albert Cervera i Areny <albert@nan-tic.com>\n"
+"PO-Revision-Date: 2024-10-08 13:40+0200\n"
+"Project-Id-Version: \n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca_ES\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
-msgctxt "field:party.address,country_zip:"
+msgctxt "field:party.address,location:"
 msgid "Location"
 msgstr "Ubicación"
+
+msgctxt "model:ir.action,name:"
+msgid "Zips"
+msgstr "Código postales"
+
+msgctxt "model:ir.action,name:act_postal_code_form"
+msgid "Postal Codes"
+msgstr "Códigos postales"
 
 msgctxt "model:ir.action,name:act_subdivision_form"
 msgid "Subdivisions"
@@ -14,14 +33,14 @@ msgctxt "model:ir.action,name:act_subdivision_form2"
 msgid "Subdivisions"
 msgstr "Subdivisiones"
 
-msgctxt "model:ir.action,name:act_zip_form"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Zips"
 msgstr "Código postales"
+
+msgctxt "model:ir.ui.menu,name:menu_postal_code_form"
+msgid "Postal Codes"
+msgstr "Códigos postales"
 
 msgctxt "model:ir.ui.menu,name:menu_subdivision_form"
 msgid "Subdivisions"
 msgstr "Subdivisiones"
-
-msgctxt "model:ir.ui.menu,name:menu_zip_form"
-msgid "Zips"
-msgstr "Código postales"
