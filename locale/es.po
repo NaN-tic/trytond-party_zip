@@ -33,10 +33,6 @@ msgctxt "model:ir.action,name:act_subdivision_form2"
 msgid "Subdivisions"
 msgstr "Subdivisiones"
 
-msgctxt "model:ir.ui.menu,name:"
-msgid "Zips"
-msgstr "Código postales"
-
 msgctxt "model:ir.ui.menu,name:menu_postal_code_form"
 msgid "Postal Codes"
 msgstr "Códigos postales"
