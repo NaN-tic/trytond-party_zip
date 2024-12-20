@@ -41,6 +41,7 @@ class Address(metaclass=PoolMeta):
     def update_location_values(values):
         pool = Pool()
         PostalCode = pool.get('country.postal_code')
+        Types = pool.get('party.address.subdivision_type')
 
         values = values.copy()
         if 'location' in values:
@@ -53,11 +54,15 @@ class Address(metaclass=PoolMeta):
                 # set country_zip, zip and city to NULL
                 if postal_codes:
                     postal_code, = postal_codes
+                    subdivision_types = Types.get_types(postal_code.country)
                     values['postal_code'] = postal_code.postal_code
                     values['city'] = postal_code.city
                     values['country'] = postal_code.country.id
-                    values['subdivision'] = (postal_code.subdivision.id if
-                        postal_code.subdivision else None)
+                    values['subdivision'] = (postal_code.subdivision.id
+                        if postal_code.subdivision
+                            and not subdivision_types
+                            or postal_code.subdivision.type in subdivision_types
+                        else None)
                     return values
                 else:
                     values['location'] = None
@@ -85,11 +90,19 @@ class Address(metaclass=PoolMeta):
 
     @fields.depends('location')
     def on_change_location(self):
+        pool = Pool()
+        Types = pool.get('party.address.subdivision_type')
+
         if self.location:
+            subdivision_types = Types.get_types(self.location.country)
             self.postal_code = self.location.postal_code
             self.city = self.location.city
             self.country = self.location.country
-            self.subdivision = self.location.subdivision
+            subdivision = self.location.subdivision
+            self.subdivision = (self.location.subdivision
+                if subdivision and not subdivision_types
+                    or subdivision.type in subdivision_types
+                else None)
         else:
             self.postal_code = None
             self.city = None
