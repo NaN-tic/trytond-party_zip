@@ -101,7 +101,7 @@ class Address(metaclass=PoolMeta):
             subdivision = self.location.subdivision
             self.subdivision = (self.location.subdivision
                 if subdivision and not subdivision_types
-                    or subdivision.type in subdivision_types
+                    or subdivision and subdivision.type in subdivision_types
                 else None)
         else:
             self.postal_code = None
