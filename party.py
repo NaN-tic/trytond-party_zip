@@ -54,14 +54,13 @@ class Address(metaclass=PoolMeta):
                 # set country_zip, zip and city to NULL
                 if postal_codes:
                     postal_code, = postal_codes
-                    subdivision_types = Types.get_types(postal_code.country)
+                    subdivision_types = Types.get_types(postal_code.country) or []
                     values['postal_code'] = postal_code.postal_code
                     values['city'] = postal_code.city
                     values['country'] = postal_code.country.id
                     values['subdivision'] = (postal_code.subdivision.id
                         if postal_code.subdivision
-                            and not subdivision_types
-                            or postal_code.subdivision.type in subdivision_types
+                            and postal_code.subdivision.type in subdivision_types
                         else None)
                     return values
                 else:
